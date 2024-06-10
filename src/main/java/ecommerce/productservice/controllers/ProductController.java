@@ -1,7 +1,10 @@
 package ecommerce.productservice.controllers;
 
+import ecommerce.productservice.exceptions.ProductLimitExceedException;
 import ecommerce.productservice.models.Product;
 import ecommerce.productservice.services.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,8 +26,11 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
-        return productService.getProductById(id);
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductLimitExceedException {
+        if(id > 100){
+            throw new ProductLimitExceedException("id is beyond limtis");
+        }
+        return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PostMapping
@@ -46,4 +52,10 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id) {
 
     }
+
+//    @ExceptionHandler(RuntimeException.class)
+//    public ResponseEntity<String> handleRuntimeException() {
+//        System.out.println("something went wrong");
+//        return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

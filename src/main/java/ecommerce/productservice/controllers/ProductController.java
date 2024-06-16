@@ -27,9 +27,9 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductLimitExceedException {
-        if(id > 100){
-            throw new ProductLimitExceedException("id is beyond limtis");
-        }
+//        if(id > 100){
+//            throw new ProductLimitExceedException("id is beyond limtis");
+//        }
         return new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
